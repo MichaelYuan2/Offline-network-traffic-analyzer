@@ -1,11 +1,13 @@
 # process the hexdump file
 def process_hexdump(input_file_path, output_file_path):
     with open(input_file_path, 'r') as infile, open(output_file_path, 'w') as outfile:
+        processed_lines = []
         for line in infile:
             if line.strip() == "":
                 outfile.write("\n")
             else:
-                outfile.write(line[:54] + "\n")
+                processed_lines.append(line[4:54].replace(' ', '').strip())
+        outfile.write(''.join(processed_lines))
 
 def read_hexdump(file_path):
     """
@@ -115,12 +117,12 @@ def decode_dhcp_message(message_bytes):
 
 def main():
     # # use the code block to process the hexdump file
-    # input_file_path = "Lab5Hex1A6.txt"
+    input_file_path = "Lab5Hex1A6.txt"
     output_file_path = "Processed_Lab5Hex1A6.txt"
-    # process_hexdump(input_file_path, output_file_path)
-    # print(f"Processed file saved to: {output_file_path}")
-    packets = read_hexdump(output_file_path)
-    print(packets)
+    process_hexdump(input_file_path, output_file_path)
+    print(f"Processed file saved to: {output_file_path}")
+    # packets = read_hexdump(output_file_path)
+    # print(packets)
 
 if __name__ == "__main__":
     main()
