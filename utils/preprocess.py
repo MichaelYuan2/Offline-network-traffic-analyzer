@@ -117,8 +117,9 @@ def decode_dhcp_message(message_bytes):
 
 def main():
     # # use the code block to process the hexdump file
-    input_file_path = "sample_data/Lab5Hex.txt"
-    output_file_path = "Processed_Lab5Hex.txt"
+    # input_file_path = "sample_data/Lab5Hex.txt"
+    input_file_path = "../sample_data/dns_1.txt"
+    output_file_path = "../sample_data/Processed_{}.txt".format(input_file_path.split("/")[-1].split(".")[0])
     process_hexdump(input_file_path, output_file_path)
     print(f"Processed file saved to: {output_file_path}")
     # packets = read_hexdump(output_file_path)

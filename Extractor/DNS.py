@@ -181,6 +181,11 @@ class DNS():
         # Return the payload from the parsed header
         return self.hexdump[24:]
     
+    def __str__(self) -> str:
+        return f"Transaction ID: 0x{self.transaction_id}, Flags: {self.flags}, Questions: {self.questions}, Answer RRs: {self.answer_rrs}, Authority RRs: {self.authority_rrs}, Additional RRs: {self.additional_rrs}"
+
+
+
 if __name__ == '__main__':
     def print_out(list):
         for i in list:

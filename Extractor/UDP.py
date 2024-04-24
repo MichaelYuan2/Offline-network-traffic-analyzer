@@ -26,11 +26,15 @@ class UDP():
         # Return the payload from the parsed header
         return self.payload
     
+    def __str__(self) -> str:
+        return f"Source Port: {self.source_port}, Destination Port: {self.destination_port}, Length: {self.length}, Checksum: {self.checksum}"
+    
 
 if __name__ == '__main__':
     udp_segment = UDP('ffb400350024659f')
-    print(f"Source Port: {udp_segment.source_port}")
-    print(f"Destination Port: {udp_segment.destination_port}")
-    print(f"Length: {udp_segment.length}")
-    print(f"Checksum: {udp_segment.checksum}")
-    print(f"Payload: {udp_segment.get_payload()}")
+    # print(f"Source Port: {udp_segment.source_port}")
+    # print(f"Destination Port: {udp_segment.destination_port}")
+    # print(f"Length: {udp_segment.length}")
+    # print(f"Checksum: {udp_segment.checksum}")
+    # print(f"Payload: {udp_segment.get_payload()}")
+    print(udp_segment)

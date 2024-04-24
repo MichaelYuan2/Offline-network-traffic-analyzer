@@ -53,22 +53,26 @@ class IP:
     def get_payload(self):
         # Return the payload from the parsed header
         return self.hexdump[self.ihl*8:]
+
+    def __str__(self) -> str:
+        return f"Version: {self.version}, IHL: {self.ihl}, TOS: {self.tos}, Total Length: {self.total_length}, Identification: {self.identification}, DF: {self.DF}, MF: {self.MF}, Fragment Offset: {self.fragment_offset}, TTL: {self.ttl}, Protocol: {self.protocol}, Checksum: {self.checksum}, Source Address: {self.source_address}, Destination Address: {self.destination_address}"
     
     
 # test it
 if __name__ == '__main__':
     ip_header = IP('45000028000040004006b8420acc023e00108077f50c')
-    print(ip_header.version)
-    print(ip_header.ihl)
-    print(ip_header.tos)
-    print(ip_header.total_length)
-    print(ip_header.identification)
-    print(ip_header.DF)
-    print(ip_header.MF)
-    print(ip_header.fragment_offset)
-    print(ip_header.ttl)
-    print(ip_header.protocol)
-    print(ip_header.checksum)
-    print(ip_header.source_address)
-    print(ip_header.destination_address)
-    print(ip_header.get_payload())
+    # print(ip_header.version)
+    # print(ip_header.ihl)
+    # print(ip_header.tos)
+    # print(ip_header.total_length)
+    # print(ip_header.identification)
+    # print(ip_header.DF)
+    # print(ip_header.MF)
+    # print(ip_header.fragment_offset)
+    # print(ip_header.ttl)
+    # print(ip_header.protocol)
+    # print(ip_header.checksum)
+    # print(ip_header.source_address)
+    # print(ip_header.destination_address)
+    # print(ip_header.get_payload())
+    print(ip_header)

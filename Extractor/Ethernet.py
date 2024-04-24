@@ -29,7 +29,7 @@ class Ethernet:
 
     
     def __str__(self):
-        return f"Destination: {self.destination}, Source: {self.source}, Type: {self.type}"
+        return f"Destination: {self.destination}, Source: {self.source}, Type: {self.type}, Type Description: {self.ethertype_description}"
 
     def get_payload(self):
     # Return the payload (everything after the Ethernet header)
@@ -57,19 +57,17 @@ def read_hexdump(file_path):
 # print(ethernet_header)
 def main():
     # Reading the hex dump from the file
-    file_path = '/Users/leo/Desktop/Offline-network-traffic-analyzer/Processed_Lab5Hex.txt'
+    file_path = 'sample_data/Processed_Lab5Hex.txt'
     hexdump = read_hexdump(file_path)
     # Using the Ethernet class to parse the Ethernet header
     ethernet_frame = Ethernet(hexdump)
-    print("Destination MAC:", ethernet_frame.destination)
-    print("Source MAC:", ethernet_frame.source)
-    print("Ethertype (Hex):", hex(ethernet_frame.type))
-    print("Ethertype Description:", ethernet_frame.ethertype_description)
-    print("Payload (Beginning):", ethernet_frame.get_payload())
+    # print("Destination MAC:", ethernet_frame.destination)
+    # print("Source MAC:", ethernet_frame.source)
+    # print("Ethertype (Hex):", hex(ethernet_frame.type))
+    # print("Ethertype Description:", ethernet_frame.ethertype_description)
+    # print("Payload (Beginning):", ethernet_frame.get_payload())
 
-#     print(f"Destination MAC: {ethernet_frame.destination_mac}")
-#     print(f"Source MAC: {ethernet_frame.source_mac}")
-#     print(f"Type: 0x{ethernet_frame.type:04x}")
+    print(ethernet_frame)
     
 if __name__ == '__main__':
     main()
