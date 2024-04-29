@@ -204,16 +204,16 @@ class DNS():
         return self.hexdump[24:]
     
     def __str__(self) -> str:
-        return f"""Transaction ID: 0x{self.transaction_id},
-                Flags: {self.flags},
-                Questions: {self.questions},
-                Answer RRs: {self.answer_rrs},
-                Authority RRs: {self.authority_rrs},
-                Additional RRs: {self.additional_rrs},
-                Questions: {self.parsed_questions},
-                Answer RRs: {self.parsed_answer_rrs},
-                Authority RRs: {self.parsed_authority_rrs},
-                Additional RRs: {self.parsed_additional_rrs}"""
+        return f"\tTransaction ID: 0x{self.transaction_id},\n" + \
+                f"\tFlags: {self.flags},\n" + \
+                f"\tQuestions: {self.questions},\n" + \
+                f"\tAnswer RRs: {self.answer_rrs},\n" + \
+                f"\tAuthority RRs: {self.authority_rrs},\n" + \
+                f"\tAdditional RRs: {self.additional_rrs},\n" + \
+                f"\tQuestions: {self.parsed_questions},\n" + \
+                f"\tAnswer RRs: {self.parsed_answer_rrs},\n" + \
+                f"\tAuthority RRs: {self.parsed_authority_rrs},\n" + \
+                f"\tAdditional RRs: {self.parsed_additional_rrs}"
 
 
 
