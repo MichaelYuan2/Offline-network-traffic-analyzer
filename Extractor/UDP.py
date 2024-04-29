@@ -27,9 +27,13 @@ class UDP():
         return self.payload
     
     def __str__(self) -> str:
-        return f"Source Port: {self.source_port}, Destination Port: {self.destination_port}, Length: {self.length}, Checksum: {self.checksum}"
+        return f"\tSource Port: {self.source_port}\n" + \
+            f"\tDestination Port: {self.destination_port}\n" + \
+            f"\tLength: {self.length}\n" + \
+            f"\tChecksum: {self.checksum}\n"
+            # f"\tPayload: {self.get_payload()}"
     
-
+    
 if __name__ == '__main__':
     udp_segment = UDP('ffb400350024659f')
     # print(f"Source Port: {udp_segment.source_port}")
