@@ -59,6 +59,5 @@ def read_hexdump(file_path):
 if __name__ == '__main__':
     file_path = 'sample_data/Processed_dns_1.txt'
     hexdump = read_hexdump(file_path)
-
     network_packet = NetworkAnalyzer(hexdump)
     print(network_packet.get_report())

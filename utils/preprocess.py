@@ -33,7 +33,7 @@ def read_hexdump(file_path):
             for hex_byte in hex_bytes:
                 current_packet.append(int(hex_byte, 16))
         
-        # Don't forget to add the last packet if the file doesn't end with a newline
+        # Add the last packet if the file doesn't end with a newline
         if current_packet:
             packets.append(current_packet)
     
@@ -118,7 +118,7 @@ def decode_dhcp_message(message_bytes):
 def main():
     # # use the code block to process the hexdump file
     # input_file_path = "sample_data/Lab5Hex.txt"
-    input_file_path = "../sample_data/dns_1.txt"
+    input_file_path = "../sample_data/Lab5Hex1A6.txt"
     output_file_path = "../sample_data/Processed_{}.txt".format(input_file_path.split("/")[-1].split(".")[0])
     process_hexdump(input_file_path, output_file_path)
     print(f"Processed file saved to: {output_file_path}")
