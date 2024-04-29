@@ -1,4 +1,4 @@
-class IP:
+class IPv4:
     def __init__(self, hexdump):
         self.hexdump = hexdump
         self.parse_header()
@@ -60,7 +60,7 @@ class IP:
     
 # test it
 if __name__ == '__main__':
-    ip_header = IP('45000028000040004006b8420acc023e00108077f50c')
+    ip_header = IPv4('45000028000040004006b8420acc023e00108077f50c')
     # print(ip_header.version)
     # print(ip_header.ihl)
     # print(ip_header.tos)

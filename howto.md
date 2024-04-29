@@ -11,6 +11,7 @@ python main.py
 # Test each layer independently
 Go to *Extractor/*, and run the .py file corrresponding to that layer
 
+e.g. to test the Ethernet layer
 ``` bash
-python ___.py
+python Ethernet.py
 ```
