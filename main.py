@@ -1,15 +1,9 @@
 # import everything from Network_Analyzer.py
 from Network_Analyzer import NetworkAnalyzer
-
-def read_store():
-    frames = []
-    file_path = './sample_data/Processed_Lab5Hex.txt'  
-    # Open the file in read mode
-    with open(file_path, 'r') as file:
-        frames = file.readlines()  # Read all lines and store them in a list
-    return frames
+from utils.preprocess import *
 
 def main():
+    # preprocess the hexdump file
     frames = read_store()
     # Process the frames
     for i, frame in enumerate(frames):

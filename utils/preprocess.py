@@ -9,37 +9,41 @@ def process_hexdump(input_file_path, output_file_path):
                 processed_lines.append(line[6:54].replace(' ', '').strip())
         outfile.write(''.join(processed_lines))
 
-def read_hexdump(file_path):
-    """
-    Reads a hexdump file and returns a list of byte arrays, each representing a packet.
+def read_store():
+    input_file_path = "../sample_data/Lab5Hex1A6.txt"
+    output_file_path = "../sample_data/Processed_{}.txt".format(input_file_path.split("/")[-1].split(".")[0])
+    process_hexdump(input_file_path, output_file_path)
+    frames = []
+    # Open the file in read mode
+    with open(output_file_path, 'r') as file:
+        frames = file.readlines()  # Read all lines and store them in a list
+    return frames
 
-    :param file_path: Path to the hexdump file.
-    :return: List of packets, where each packet is a bytearray.
-    """
-    packets = []
-    current_packet = bytearray()
+# def read_hexdump(file_path):
+#     """
+#     Reads a hexdump file and returns a list of byte arrays, each representing a packet.
 
-    with open(file_path, 'r') as file:
-        for line in file:
-            if line.strip() == "":
-                if current_packet:
-                    packets.append(current_packet)
-                    current_packet = bytearray()
-                continue
-            
-            # Split the line into parts, ignore the offset and parse the hex bytes
-            parts = line.strip().split()
-            hex_bytes = parts[1:]  # Skip the offset part
-            for hex_byte in hex_bytes:
-                current_packet.append(int(hex_byte, 16))
-        
-        # Add the last packet if the file doesn't end with a newline
-        if current_packet:
-            packets.append(current_packet)
-    
-    return packets
-
-
+#     :param file_path: Path to the hexdump file.
+#     :return: List of packets, where each packet is a bytearray.
+#     """
+#     packets = []
+#     current_packet = bytearray()
+#     with open(file_path, 'r') as file:
+#         for line in file:
+#             if line.strip() == "":
+#                 if current_packet:
+#                     packets.append(current_packet)
+#                     current_packet = bytearray()
+#                 continue
+#             # Split the line into parts, ignore the offset and parse the hex bytes
+#             parts = line.strip().split()
+#             hex_bytes = parts[1:]  # Skip the offset part
+#             for hex_byte in hex_bytes:
+#                 current_packet.append(int(hex_byte, 16))
+#         # Add the last packet if the file doesn't end with a newline
+#         if current_packet:
+#             packets.append(current_packet)
+#     return packets
 
 def decode_ethernet_frame(frame_bytes):
     destination_mac = ':'.join(format(byte, '02x') for byte in frame_bytes[0:6])
@@ -115,15 +119,15 @@ def decode_dhcp_message(message_bytes):
         "Transaction ID": xid
     }
 
-def main():
-    # # use the code block to process the hexdump file
-    # input_file_path = "sample_data/Lab5Hex.txt"
-    input_file_path = "../sample_data/Lab5Hex1A6.txt"
-    output_file_path = "../sample_data/Processed_{}.txt".format(input_file_path.split("/")[-1].split(".")[0])
-    process_hexdump(input_file_path, output_file_path)
-    print(f"Processed file saved to: {output_file_path}")
-    # packets = read_hexdump(output_file_path)
-    # print(packets)
+# def main():
+#     # # use the code block to process the hexdump file
+#     # input_file_path = "sample_data/Lab5Hex.txt"
+#     input_file_path = "../sample_data/Lab5Hex1A6.txt"
+#     output_file_path = "../sample_data/Processed_{}.txt".format(input_file_path.split("/")[-1].split(".")[0])
+#     process_hexdump(input_file_path, output_file_path)
+#     print(f"Processed file saved to: {output_file_path}")
+#     # packets = read_hexdump(output_file_path)
+#     # print(packets)
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
