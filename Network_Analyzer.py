@@ -28,14 +28,14 @@ class NetworkAnalyzer():
         udp_payload = self.udp.get_payload()
         print("UDP Payload: ", udp_payload)
         self.dns = DNS(udp_payload)
-        # try:
-        #     self.dns = DNS(udp_payload)
-        # except:
-        #     self.dns = None
-        # try :
-        #     self.dhcp = DHCP(udp_payload)
-        # except:
-        #     self.dhcp = None
+        try:
+            self.dns = DNS(udp_payload)
+        except:
+            self.dns = None
+        try :
+            self.dhcp = DHCP(udp_payload)
+        except:
+            self.dhcp = None
         if not self.dns and not self.dhcp:
             report = "Unknown packet type"
 

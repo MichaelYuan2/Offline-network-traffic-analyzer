@@ -32,14 +32,21 @@ class DHCP():
             12: "Host Name",
             15: "Domain Name",
             28: "Broadcast Address",
+            33: "Static Route",
             50: "Requested IP Address",
             51: "IP Address Lease Time",
             53: "DHCP Message Type",
             54: "Server Identifier",
             55: "Parameter Request List",
             57: "Maximum DHCP Message Size",
+            60: "Vendor Class Identifier",
             61: "Client Identifier",
+            66: "TFTP Server Name",
+            67: "Bootfile Name",
             82: "Relay Agent Information",
+            116: "DHCP Auto-Configuration",
+            121: "Classless Static Route",
+            150: "TFTP Server IP Address",
             255: "End"
             # more options can be added
         }
@@ -87,9 +94,9 @@ class DHCP():
         # parse a single option
         option_num = int(self.hexdump[offset:offset+2], 16)
         # print(option_num)
-        option = self.option_type.get(option_num, 'Unknown')
+        option = self.option_type.get(option_num, f'0x{option_num}' + '(Unknown)')
         if option_num == 255:
-            self.options[option] = 'End'
+            self.options[option] = ''
             return False, 0
         elif option_num == 53:
             length = int(self.hexdump[offset+2:offset+4], 16)
