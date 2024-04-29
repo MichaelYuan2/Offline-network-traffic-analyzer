@@ -1,6 +1,15 @@
 class IPv4:
     def __init__(self, hexdump):
         self.hexdump = hexdump
+        self.protocol_type = {
+            1: 'ICMP',
+            2: 'IGMP',
+            6: 'TCP',
+            17: 'UDP',
+            41: 'IPv6',
+            89: 'OSPF',
+            132: 'SCTP'
+        }
         self.parse_header()
 
     def parse_header(self):
@@ -33,7 +42,8 @@ class IPv4:
         self.ttl = int(self.hexdump[16:18], 16)
 
         # Parse Protocol
-        self.protocol = int(self.hexdump[18:20], 16)
+        self.protocol = self.hexdump[18:20]
+        self.protocol = f"0x{self.protocol}" + ' (' + f"{self.protocol_type.get(int(self.protocol, 16), 'Unknown Protocol')}" + ')'
 
         # Parse Header Checksum
         self.checksum = int(self.hexdump[20:24], 16)

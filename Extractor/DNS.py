@@ -13,6 +13,7 @@ class DNS():
             15: "MX",
             16: "TXT",
             28: "AAAA",
+            33: "SRV",
             # Add more as needed
         }
 
@@ -21,6 +22,7 @@ class DNS():
             2: "CS",
             3: "CH",
             4: "HS",
+            33: "ANY",
             # Add more as needed
         }
         self.parse_header()
@@ -120,34 +122,47 @@ class DNS():
     
     def parse_question(self, offset):
         domain_name, offset = self.parse_domain_name(offset)
-        question_type = int(self.hexdump[offset:offset + 4], 16)
-        question_class = int(self.hexdump[offset + 4:offset + 8], 16)
+        question_type = self.hexdump[offset:offset + 4]
+        question_type = f"0x{question_type}" + ' (' + f"{self.question_types.get(int(question_type, 16), question_type)}" + ')'
+        question_class = self.hexdump[offset + 4:offset + 8]
+        question_class = f"0x{question_class}" + ' (' + f"{self.question_classes.get(int(question_class, 16), question_class)}" + ')'
         offset += 8
-        return {"domain_name": domain_name, "question_type": self.question_types.get(question_type, "Unknown"), "question_class": self.question_classes.get(question_class, "Unknown")}, offset
+        return {"domain_name": domain_name, "question_type": question_type, "question_class": question_class}, offset
 
     def parse_answer_rr(self, offset):
         # Parse a single answer RR from the hexdump
         domain_name, offset = self.parse_domain_name(offset)
         rr_type = self.hexdump[offset:offset + 4]
+        rr_type = f"0x{rr_type}" + ' (' + f"{self.question_types.get(int(rr_type, 16), rr_type)}" + ')'
         rr_class = self.hexdump[offset + 4:offset + 8]
-        ttl = int(self.hexdump[offset + 8:offset + 16], 16)
-        data_length = int(self.hexdump[offset + 16:offset + 20], 16)
-        preference = int(self.hexdump[offset + 20:offset + 24], 16)
+        rr_class = f"0x{rr_class}" + ' (' + f"{self.question_classes.get(int(rr_class, 16), rr_class)}" + ')'
+        ttl = self.hexdump[offset + 8:offset + 16]
+        ttl = f"0x{ttl}" + ' (' + f"{int(ttl, 16)}" + ')'
+        data_length = self.hexdump[offset + 16:offset + 20]
+        data_length_str = f"0x{data_length}" + ' (' + f"{int(data_length, 16)}" + ')'
+        data_length = int(data_length, 16)
+        preference = self.hexdump[offset + 20:offset + 24]
+        preference = f"0x{preference}" + ' (' + f"{int(preference, 16)}" + ')'
         rr_data, _ = self.parse_domain_name(offset + 24)
         # rr_data = self.hexdump[offset + 24:offset + 24 + (data_length * 2)]
         offset += 20 + (data_length * 2)
-        return {"domain_name": domain_name, "rr_type": self.question_types.get(rr_type, rr_type), "rr_class": self.question_classes.get(rr_class, rr_class), "ttl": ttl, "data_length": data_length, "preference": preference,  "rr_data": rr_data}, offset
+        return {"domain_name": domain_name, "rr_type": rr_type, "rr_class": rr_class, "ttl": ttl, "data_length": data_length_str, "preference": preference,  "rr_data": rr_data}, offset
 
     def parse_authority_rr(self, offset):
         domain_name, offset = self.parse_domain_name(offset)
-        rr_type = int(self.hexdump[offset:offset + 4], 16)
-        rr_class = int(self.hexdump[offset + 4:offset + 8], 16)
-        ttl = int(self.hexdump[offset + 8:offset + 16], 16)
-        data_length = int(self.hexdump[offset + 16:offset + 20], 16)
+        rr_type = self.hexdump[offset:offset + 4]
+        rr_type = f"0x{rr_type}" + ' (' + f"{self.question_types.get(int(rr_type, 16), rr_type)}" + ')'
+        rr_class = self.hexdump[offset + 4:offset + 8]
+        rr_class = f"0x{rr_class}" + ' (' + f"{self.question_classes.get(int(rr_class, 16), rr_class)}" + ')'
+        ttl = self.hexdump[offset + 8:offset + 16]
+        ttl = f"0x{ttl}" + ' (' + f"{int(ttl, 16)}" + ')'
+        data_length = self.hexdump[offset + 16:offset + 20]
+        data_length_str = f"0x{data_length}" + ' (' + f"{int(data_length, 16)}" + ')'
+        data_length = int(data_length, 16)
         rr_data, _ = self.parse_domain_name(offset + 20)
         # rr_data = self.hexdump[offset + 20:offset + 20 + (data_length * 2)]
         offset += 20 + (data_length * 2)
-        return {"domain_name": domain_name, "rr_type": self.question_types.get(rr_type, rr_type), "rr_class": self.question_classes.get(rr_class, rr_class), "ttl": ttl, "data_length": data_length, "rr_data": rr_data}, offset
+        return {"domain_name": domain_name, "rr_type": rr_type, "rr_class": rr_class, "ttl": ttl, "data_length": data_length_str, "rr_data": rr_data}, offset
 
 
     def parse_IPv4Address(self, hexdump):
@@ -162,10 +177,17 @@ class DNS():
     
     def parse_additional_rr(self, offset):
         domain_name, offset = self.parse_domain_name(offset)
-        rr_type = int(self.hexdump[offset:offset + 4], 16)
-        rr_class = int(self.hexdump[offset + 4:offset + 8], 16)
-        ttl = int(self.hexdump[offset + 8:offset + 16], 16)
-        data_length = int(self.hexdump[offset + 16:offset + 20], 16)
+        rr_type = self.hexdump[offset:offset + 4]
+        rr_type_str = f"0x{rr_type}" + ' (' + f"{self.question_types.get(int(rr_type, 16), rr_type)}" + ')'
+        rr_type = int(rr_type, 16)
+        rr_class = self.hexdump[offset + 4:offset + 8]
+        rr_class = f"0x{rr_class}" + ' (' + f"{self.question_classes.get(int(rr_class, 16), rr_class)}" + ')'
+        ttl = self.hexdump[offset + 8:offset + 16]
+        ttl = f"0x{ttl}" + ' (' + f"{int(ttl, 16)}" + ')'
+        data_length = self.hexdump[offset + 16:offset + 20]
+        data_length_str = f"0x{data_length}" + ' (' + f"{int(data_length, 16)}" + ')'
+        data_length = int(data_length, 16)
+
         if rr_type == 1:
             rr_data = self.hexdump[offset + 20:offset + 20 + (data_length * 2)]
             rr_data = self.parse_IPv4Address(rr_data)
@@ -175,14 +197,23 @@ class DNS():
         else:
             rr_data = self.hexdump[offset + 20:offset + 20 + (data_length * 2)]
         offset += 20 + (data_length * 2)
-        return {"domain_name": domain_name, "rr_type": self.question_types.get(rr_type, rr_type), "rr_class": self.question_classes.get(rr_class, rr_class), "ttl": ttl, "data_length": data_length, "rr_data": rr_data}, offset
+        return {"domain_name": domain_name, "rr_type": rr_type_str, "rr_class": rr_class, "ttl": ttl, "data_length": data_length_str, "rr_data": rr_data}, offset
 
     def get_payload(self):
         # Return the payload from the parsed header
         return self.hexdump[24:]
     
     def __str__(self) -> str:
-        return f"Transaction ID: 0x{self.transaction_id}, Flags: {self.flags}, Questions: {self.questions}, Answer RRs: {self.answer_rrs}, Authority RRs: {self.authority_rrs}, Additional RRs: {self.additional_rrs}"
+        return f"""Transaction ID: 0x{self.transaction_id},
+                Flags: {self.flags},
+                Questions: {self.questions},
+                Answer RRs: {self.answer_rrs},
+                Authority RRs: {self.authority_rrs},
+                Additional RRs: {self.additional_rrs},
+                Questions: {self.parsed_questions},
+                Answer RRs: {self.parsed_answer_rrs},
+                Authority RRs: {self.parsed_authority_rrs},
+                Additional RRs: {self.parsed_additional_rrs}"""
 
 
 

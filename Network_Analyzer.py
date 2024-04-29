@@ -47,7 +47,7 @@ class NetworkAnalyzer():
 
     def __str__(self):
         if self.dns:
-            return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\nDNS: {self.dns}"
+            return f"Ethernet: {self.ethernet}\n\n IP: {self.ip}\n\n UDP: {self.udp}\n\n DNS: {self.dns}"
         # if self.dhcp: 
         #     return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\nDHCP: {self.dhcp}"
         return "Unknown packet type"
