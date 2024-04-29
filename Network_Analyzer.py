@@ -6,7 +6,7 @@
 # DNS Header
 
 from Extractor.Ethernet import Ethernet
-from Extractor.IP import IPv4
+from Extractor.IP import IP
 from Extractor.UDP import UDP
 from Extractor.DNS import DNS
 from Extractor.DHCP import DHCP
@@ -16,44 +16,53 @@ class NetworkAnalyzer():
     def __init__(self, hexdump):
         self.hexdump = hexdump
         self.parse_packet()
+        self.err_msg = None
     
     def parse_packet(self):
         self.ethernet = Ethernet(self.hexdump)
         ip_hexdump = self.ethernet.get_payload()
-        # print("IP Hexdump: ", ip_hexdump)
 
         # Check if the packet uses IPv4
-        self.ip = IPv4(ip_hexdump)
-        udp_hexdump = self.ip.get_payload()
-        # print("UDP Hexdump: ", udp_hexdump)
+        self.ip = IP(ip_hexdump)
+        if self.ip.version == 6:
+            self.err_msg = "ERROR: IPv6 playload prase is not supported"
+        elif self.ip.version == 4:
+            if self.ip.protocol == "UDP":
+                udp_hexdump = self.ip.get_payload()
+                self.udp = UDP(udp_hexdump)
+                udp_payload = self.udp.get_payload()
 
-        # Check if the packet uses UDP
-        self.udp = UDP(udp_hexdump)
-        udp_payload = self.udp.get_payload()
-        # print("UDP Payload: ", udp_payload)
+                #v Check if the packet uses DNS or DHCP
+                self.dns = DNS(udp_payload)
+                try:
+                    self.dns = DNS(udp_payload)
+                except:
+                    self.dns = None
+                try :
+                    self.dhcp = DHCP(udp_payload)
+                except:
+                    self.dhcp = None
+                if not self.dns and not self.dhcp:
+                    self.err_msg = "ERROR: Unknown UDP payload. Only DNS and DHCP are supported."
+            else:
+                self.err_msg = "ERROR: {} protocol is not supported".format(self.ip.protocol)
 
-        # Check if the packet uses DNS or DHCP
-        self.dns = DNS(udp_payload)
-        try:
-            self.dns = DNS(udp_payload)
-        except:
-            self.dns = None
-        try :
-            self.dhcp = DHCP(udp_payload)
-        except:
-            self.dhcp = None
-        if not self.dns and not self.dhcp:
-            report = "Unknown packet type"
 
     def __str__(self):
-        if self.dns:
-            return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\nDNS:\n{self.dns}"
-        # if self.dhcp: 
-        #     return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\nDHCP: {self.dhcp}"
+        if self.err_msg != None:
+            if self.udp:
+                return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\n" +self.err_msg+ "\n"+"Done!"
+            return f"Ethernet: {self.ethernet}\nIP: {self.ip}\n" +self.err_msg+ "\n"+"Done!"
+        
+        elif self.dns:
+            return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\nDNS: {self.dns}"+"\n"+"Done!"
+        elif self.dhcp: 
+            return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\nDHCP: {self.dhcp}"+"\n" +"Done!"
         return "Unknown packet type"
     
     def get_report(self): 
-        return str(self)
+        self.parse_packet()
+        return print(self)
     
 
 def read_hexdump(file_path):
@@ -63,7 +72,7 @@ def read_hexdump(file_path):
 
 
 if __name__ == '__main__':
-    file_path = 'sample_data/Processed_Lab5Hex.txt'
+    file_path = './sample_data/Processed_Lab5Hex.txt'
     hexdump = read_hexdump(file_path)
     network_packet = NetworkAnalyzer(hexdump)
-    print(network_packet.get_report())
+    network_packet.get_report()

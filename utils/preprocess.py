@@ -10,7 +10,7 @@ def process_hexdump(input_file_path, output_file_path):
         outfile.write(''.join(processed_lines))
 
 def read_store(input_file_path):
-    output_file_path = "./sample_data/Processed_{}.txt".format(input_file_path.split("/")[-1].split(".")[0])
+    output_file_path = "./sample_data/processed_{}.txt".format(input_file_path.split("/")[-1].split(".")[0])
     process_hexdump(input_file_path, output_file_path)
     frames = []
     # Open the file in read mode

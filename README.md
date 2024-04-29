@@ -8,7 +8,7 @@ make run
 
 # Use python CLI
 ``` bash
-python main.py
+python main.py --input_path <path_to_pcap_file>
 ```
 
 # Test each layer independently
