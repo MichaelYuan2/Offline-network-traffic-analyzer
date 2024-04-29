@@ -3,8 +3,9 @@ from Network_Analyzer import NetworkAnalyzer
 from utils.preprocess import *
 
 def main():
+    input_file_path = "sample_data/Lab5Hex.txt"
     # preprocess the hexdump file
-    frames = read_store()
+    frames = read_store(input_file_path)
     # Process the frames
     for i, frame in enumerate(frames):
         print(f"Frame {i+1}: {frame}")

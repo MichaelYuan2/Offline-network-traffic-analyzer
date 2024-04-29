@@ -9,9 +9,8 @@ def process_hexdump(input_file_path, output_file_path):
                 processed_lines.append(line[6:54].replace(' ', '').strip())
         outfile.write(''.join(processed_lines))
 
-def read_store():
-    input_file_path = "../sample_data/Lab5Hex1A6.txt"
-    output_file_path = "../sample_data/Processed_{}.txt".format(input_file_path.split("/")[-1].split(".")[0])
+def read_store(input_file_path):
+    output_file_path = "./sample_data/Processed_{}.txt".format(input_file_path.split("/")[-1].split(".")[0])
     process_hexdump(input_file_path, output_file_path)
     frames = []
     # Open the file in read mode
