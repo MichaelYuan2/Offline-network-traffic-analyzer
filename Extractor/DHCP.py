@@ -94,14 +94,16 @@ class DHCP():
         # parse a single option
         option_num = int(self.hexdump[offset:offset+2], 16)
         # print(option_num)
-        option = self.option_type.get(option_num, f'0x{option_num}' + '(Unknown)')
+        # option = self.option_type.get(option_num, f'0x{option_num}' + '(Unknown)')
+        option = f"0x{self.hexdump[offset:offset+2]}" + ' (' + f"{self.option_type.get(option_num, 'Unknown option')}" + ')'
         if option_num == 255:
             self.options[option] = ''
             return False, 0
         elif option_num == 53:
             length = int(self.hexdump[offset+2:offset+4], 16)
             value = self.hexdump[offset+4:offset+4+length*2]
-            self.options[option] = self.message_type.get(int(value, 16), 'Unknown')
+            value = f"0x{value}" + ' (' + f"{self.message_type.get(int(value, 16), 'Unknown')}" + ')'
+            self.options[option] = value
             offset += 4+length*2
         elif option_num == 54:
             length = int(self.hexdump[offset+2:offset+4], 16)
