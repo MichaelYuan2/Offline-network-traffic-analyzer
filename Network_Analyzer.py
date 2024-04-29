@@ -50,9 +50,10 @@ class NetworkAnalyzer():
 
     def __str__(self):
         if self.err_msg != None:
-            if self.udp:
+            try:
                 return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\n" +self.err_msg+ "\n"+"Done!"
-            return f"Ethernet: {self.ethernet}\nIP: {self.ip}\n" +self.err_msg+ "\n"+"Done!"
+            except:
+                return f"Ethernet: {self.ethernet}\nIP: {self.ip}\n" +self.err_msg+ "\n"+"Done!"
         
         elif self.dns:
             return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\nDNS: {self.dns}"+"\n"+"Done!"
@@ -72,7 +73,7 @@ def read_hexdump(file_path):
 
 
 if __name__ == '__main__':
-    file_path = './sample_data/Processed_Lab5Hex.txt'
+    file_path = './sample_data/Processed_dns.txt'
     hexdump = read_hexdump(file_path)
     network_packet = NetworkAnalyzer(hexdump)
     network_packet.get_report()
