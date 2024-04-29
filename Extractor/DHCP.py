@@ -11,6 +11,9 @@ class DHCP():
             0: "Unicast",
             1: "Broadcast"
         }
+        self.hardware_types = {
+            1: "Ethernet"
+        }
         self.message_type = {
             1: "DHCP DISCOVER",
             2: "DHCP OFFER",
@@ -23,11 +26,20 @@ class DHCP():
         }
         self.option_type = {
             1: "Subnet Mask",
+            2: "Time Offset",
             3: "Router",
             6: "Domain Name Server",
+            12: "Host Name",
+            15: "Domain Name",
+            28: "Broadcast Address",
+            50: "Requested IP Address",
+            51: "IP Address Lease Time",
             53: "DHCP Message Type",
             54: "Server Identifier",
+            55: "Parameter Request List",
+            57: "Maximum DHCP Message Size",
             61: "Client Identifier",
+            82: "Relay Agent Information",
             255: "End"
             # more options can be added
         }
@@ -37,13 +49,16 @@ class DHCP():
     def parse_header(self):
         # DHCP header fields and their lengths in bytes
         self.opcode = self.opcode_type.get(int(self.hexdump[0:2]), "Unknown") # 1 for boot request, 2 for boot reply
+        self.opcode = f"0x{self.hexdump[0:2]}" + ' (' + f"{self.opcode}"  + ')'
         self.hardware_type = self.hexdump[2:4] # 1 for ethernet
+        self.hardware_type = f"0x{self.hardware_type}" + ' (' + f"{self.hardware_types.get(int(self.hardware_type), 'Unknown')}" + ')'
         self.hardware_address_length = self.hexdump[4:6]
         self.hops = self.hexdump[6:8]
-        self.transaction_id = self.hexdump[8:16]
-        self.seconds_elapsed = self.hexdump[16:20]
+        self.hops = f"0x{self.hops}" + ' (' + f"{int(self.hops, 16)}" + ')'
+        self.transaction_id = f"0x{self.hexdump[8:16]}"
+        self.seconds_elapsed = f"0x{self.hexdump[16:20]}"
         self.flags = self.hexdump[20:24]
-        self.flags = f"{self.flags}" + ' (' + f"{self.flags_type.get(int(self.flags[0], 16) >> 7, 'Unknown')}" + ')'
+        self.flags = f"0x{self.flags}" + ' (' + f"{self.flags_type.get(int(self.flags[0], 16) >> 7, 'Unknown')}" + ')'
         self.client_ip = self.hexdump[24:32]
         self.client_ip = '.'.join(str(int(self.client_ip[i:i+2], 16)) for i in range(0, 8, 2))
         self.your_ip = self.hexdump[32:40]
@@ -71,7 +86,7 @@ class DHCP():
     def parse_option(self, offset):
         # parse a single option
         option_num = int(self.hexdump[offset:offset+2], 16)
-        print(option_num)
+        # print(option_num)
         option = self.option_type.get(option_num, 'Unknown')
         if option_num == 255:
             self.options[option] = 'End'
@@ -89,8 +104,9 @@ class DHCP():
         elif option_num == 61:
             length = int(self.hexdump[offset+2:offset+4], 16)
             value = self.hexdump[offset+4:offset+4+length*2]
-            hardware_type = int(value[0:2], 16)
-            self.options[option] = {'Hardware Type': hardware_type}, {'Client Identifier': ':'.join(value[i:i+2] for i in range(2, length*2, 2))}
+            hardware_type = value[0:2]
+            hardware_type = f"0x{hardware_type}" + ' (' + f"{self.hardware_types.get(int(hardware_type), 'Unknown')}" + ')'
+            self.options[option] = {'Hardware Type': hardware_type, 'Client Identifier': ':'.join(value[i:i+2] for i in range(2, length*2, 2))}
             offset += 4+length*2
         else:
             length = int(self.hexdump[offset+2:offset+4], 16)
@@ -120,5 +136,6 @@ class DHCP():
 
     
 if __name__ == '__main__':
-    dhcp_message = DHCP('0101060055f6981403000000ac101468000000000000000000000000001cc0e8232100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000638253633501073604ac1014d33d0701001cc0e82321ff')
+    dhcp_message = DHCP('01010600a27af44c0000000000000000000000000000000000000000001cc0e8232100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000638253633501017401013d0701001cc0e823213204ac1014680c094b464943542d4c33313c084d53465420352e30370b010f03062c2e2f1f21f92b2b02dc00ff')
+    # dhcp_message = DHCP('0101060055f6981403000000ac101468000000000000000000000000001cc0e8232100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000638253633501073604ac1014d33d0701001cc0e82321ff')
     print(dhcp_message)
