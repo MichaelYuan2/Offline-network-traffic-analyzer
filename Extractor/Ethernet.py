@@ -14,10 +14,14 @@ class Ethernet:
         self.source = ':'.join(self.hexdump[i:i+2] for i in range(12, 24, 2))
 
         # EtherType field (2 bytes)
-        self.type = int(self.hexdump[24:28],16)
+        self.type = self.hexdump[24:28]
+
+        # Convert hex string to integer
+        ethertype_int = int(self.type, 16)
 
         # Set readable EtherType description
-        self.ethertype_description = self.get_ethertype_description(self.type)
+        self.ethertype_description = self.get_ethertype_description(ethertype_int)
+        self.type = f"0x{self.type}({self.ethertype_description})"
 
     def get_ethertype_description(self, type):
         ethertype_map = {
@@ -28,8 +32,10 @@ class Ethernet:
         return ethertype_map.get(type, "Unknown")
 
     
-    def __str__(self):
-        return f"Destination: {self.destination}, Source: {self.source}, Type: {self.type}, Type Description: {self.ethertype_description}"
+    def __str__(self) -> str:
+        return f"\tDestination: {self.destination}\n"+ \
+        f"\tSource: {self.source}\n" + \
+        f"\tType: {self.type}"
 
     def get_payload(self):
     # Return the payload (everything after the Ethernet header)

@@ -124,21 +124,21 @@ class DHCP():
 
 
     def __str__(self) -> str:
-        return f"Opcode: {self.opcode}\n" + \
-            f"Hardware Type: {self.hardware_type}\n" + \
-            f"Hardware Address Length: {self.hardware_address_length}\n" + \
-            f"Hops: {self.hops}\n" + \
-            f"Transaction ID: {self.transaction_id}\n" + \
-            f"Seconds Elapsed: {self.seconds_elapsed}\n" + \
-            f"Flags: {self.flags}\n" + \
-            f"Client IP: {self.client_ip}\n" + \
-            f"Your IP: {self.your_ip}\n" + \
-            f"Server IP: {self.server_ip}\n" + \
-            f"Gateway IP: {self.gateway_ip}\n" + \
-            f"Client Hardware Address: {self.client_hardware_address}\n" + \
-            f"Server Name: {self.server_name}\n" + \
-            f"Boot Filename: {self.boot_filename}\n" + \
-            f"Options: {self.options}"
+        return f"\tOpcode: {self.opcode}\n" + \
+            f"\tHardware Type: {self.hardware_type}\n" + \
+            f"\tHardware Address Length: {self.hardware_address_length}\n" + \
+            f"\tHops: {self.hops}\n" + \
+            f"\tTransaction ID: {self.transaction_id}\n" + \
+            f"\tSeconds Elapsed: {self.seconds_elapsed}\n" + \
+            f"\tFlags: {self.flags}\n" + \
+            f"\tClient IP: {self.client_ip}\n" + \
+            f"\tYour IP: {self.your_ip}\n" + \
+            f"\tServer IP: {self.server_ip}\n" + \
+            f"\tGateway IP: {self.gateway_ip}\n" + \
+            f"\tClient Hardware Address: {self.client_hardware_address}\n" + \
+            f"\tServer Name: {self.server_name}\n" + \
+            f"\tBoot Filename: {self.boot_filename}\n" + \
+            f"\tOptions: {self.options}"
             # f"DHCP Message Type: {self.options['DHCP Message Type']}\n" + \
 
     

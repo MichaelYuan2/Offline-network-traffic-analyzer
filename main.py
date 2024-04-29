@@ -8,7 +8,7 @@ def main():
     frames = read_store(input_file_path)
     # Process the frames
     for i, frame in enumerate(frames):
-        print(f"Frame {i+1}: {frame}")
+        print(f"Frame {i+1}: ")
         network_packet = NetworkAnalyzer(frame)
         print(network_packet.get_report())
 

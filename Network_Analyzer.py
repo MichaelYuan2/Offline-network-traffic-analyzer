@@ -20,17 +20,17 @@ class NetworkAnalyzer():
     def parse_packet(self):
         self.ethernet = Ethernet(self.hexdump)
         ip_hexdump = self.ethernet.get_payload()
-        print("IP Hexdump: ", ip_hexdump)
+        # print("IP Hexdump: ", ip_hexdump)
 
         # Check if the packet uses IPv4
         self.ip = IPv4(ip_hexdump)
         udp_hexdump = self.ip.get_payload()
-        print("UDP Hexdump: ", udp_hexdump)
+        # print("UDP Hexdump: ", udp_hexdump)
 
         # Check if the packet uses UDP
         self.udp = UDP(udp_hexdump)
         udp_payload = self.udp.get_payload()
-        print("UDP Payload: ", udp_payload)
+        # print("UDP Payload: ", udp_payload)
 
         # Check if the packet uses DNS or DHCP
         self.dns = DNS(udp_payload)
@@ -47,7 +47,7 @@ class NetworkAnalyzer():
 
     def __str__(self):
         if self.dns:
-            return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\nDNS: {self.dns}"
+            return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\nDNS:\n{self.dns}"
         # if self.dhcp: 
         #     return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\nDHCP: {self.dhcp}"
         return "Unknown packet type"

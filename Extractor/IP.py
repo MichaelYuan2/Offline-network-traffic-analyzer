@@ -55,8 +55,22 @@ class IPv4:
         return self.hexdump[self.ihl*8:]
 
     def __str__(self) -> str:
-        return f"Version: {self.version}, IHL: {self.ihl}, TOS: {self.tos}, Total Length: {self.total_length}, Identification: {self.identification}, DF: {self.DF}, MF: {self.MF}, Fragment Offset: {self.fragment_offset}, TTL: {self.ttl}, Protocol: {self.protocol}, Checksum: {self.checksum}, Source Address: {self.source_address}, Destination Address: {self.destination_address}"
-    
+        return f"\tVersion: {self.version}\n" + \
+            f"\tIHL: {self.ihl}\n" + \
+            f"\tTOS: {self.tos}\n" + \
+            f"\tTotal Length: {self.total_length}\n" + \
+            f"\tVersion: {self.version}\n" + \
+            f"\tIdentification: {self.identification}\n" + \
+            f"\tDF: {self.DF}\n" + \
+            f"\tMF: {self.MF}\n" + \
+            f"\tFragment Offset: {self.fragment_offset}\n" + \
+            f"\tTTL: {self.ttl}\n" + \
+            f"\tProtocol: {self.protocol}\n" + \
+            f"\tChecksum: {self.checksum}\n" + \
+            f"\tSource Address: {self.source_address}\n" + \
+            f"\tDestination Address: {self.destination_address}\n" + \
+            f"\tOptions: {self.options}\n" + \
+            f"\tPayload Length: {self.payload_length}\n"    
     
 # test it
 if __name__ == '__main__':
