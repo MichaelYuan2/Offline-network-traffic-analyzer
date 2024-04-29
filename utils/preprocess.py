@@ -3,8 +3,8 @@ def process_hexdump(input_file_path, output_file_path):
     with open(input_file_path, 'r') as infile, open(output_file_path, 'w') as outfile:
         processed_lines = []
         for line in infile:
-            if line.strip() == "":
-                outfile.write("\n")
+            if line == "\n":
+                processed_lines.append("\n")
             else:
                 processed_lines.append(line[6:54].replace(' ', '').strip())
         outfile.write(''.join(processed_lines))

@@ -6,7 +6,7 @@
 # DNS Header
 
 from Extractor.Ethernet import Ethernet
-from Extractor.IP import IP
+from Extractor.IP import IPv4
 from Extractor.UDP import UDP
 from Extractor.DNS import DNS
 from Extractor.DHCP import DHCP
@@ -21,21 +21,27 @@ class NetworkAnalyzer():
         self.ethernet = Ethernet(self.hexdump)
         ip_hexdump = self.ethernet.get_payload()
         print("IP Hexdump: ", ip_hexdump)
-        self.ip = IP(ip_hexdump)
+
+        # Check if the packet uses IPv4
+        self.ip = IPv4(ip_hexdump)
         udp_hexdump = self.ip.get_payload()
         print("UDP Hexdump: ", udp_hexdump)
+
+        # Check if the packet uses UDP
         self.udp = UDP(udp_hexdump)
         udp_payload = self.udp.get_payload()
         print("UDP Payload: ", udp_payload)
+
+        # Check if the packet uses DNS or DHCP
         self.dns = DNS(udp_payload)
-        # try:
-        #     self.dns = DNS(udp_payload)
-        # except:
-        #     self.dns = None
-        # try :
-        #     self.dhcp = DHCP(udp_payload)
-        # except:
-        #     self.dhcp = None
+        try:
+            self.dns = DNS(udp_payload)
+        except:
+            self.dns = None
+        try :
+            self.dhcp = DHCP(udp_payload)
+        except:
+            self.dhcp = None
         if not self.dns and not self.dhcp:
             report = "Unknown packet type"
 
@@ -57,7 +63,7 @@ def read_hexdump(file_path):
 
 
 if __name__ == '__main__':
-    file_path = 'sample_data/Processed_dns_1.txt'
+    file_path = 'sample_data/Processed_Lab5Hex.txt'
     hexdump = read_hexdump(file_path)
     network_packet = NetworkAnalyzer(hexdump)
     print(network_packet.get_report())
