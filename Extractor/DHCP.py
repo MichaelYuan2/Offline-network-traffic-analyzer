@@ -123,6 +123,13 @@ class DHCP():
             self.options[option] = value
             offset += 4+length*2
         return True, offset
+    
+    def option_str(self):
+        # return a string representation of the options
+        option_str = '\n'
+        for option, value in self.options.items():
+            option_str += f"\t\t{option}: {value}\n"
+        return option_str
 
 
     def __str__(self) -> str:
@@ -140,7 +147,7 @@ class DHCP():
             f"\tClient Hardware Address: {self.client_hardware_address}\n" + \
             f"\tServer Name: {self.server_name}\n" + \
             f"\tBoot Filename: {self.boot_filename}\n" + \
-            f"\tOptions: {self.options}"
+            f"\tOptions: {self.option_str()}"
             # f"DHCP Message Type: {self.options['DHCP Message Type']}\n" + \
 
     
