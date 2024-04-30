@@ -71,7 +71,7 @@ class NetworkAnalyzer():
     
     def get_report(self): 
         self.parse_packet()
-        return print(self)
+        return self.__str__()
     
 
 def read_hexdump(file_path):
