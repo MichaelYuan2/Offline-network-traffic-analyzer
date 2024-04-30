@@ -28,9 +28,14 @@ class IP:
                     option['length'] = length
                     if length + index > len(options_hex):
                         raise ValueError("Invalid option length")
-
-                    option_content = options_hex[index + 2:index + length]
-                    option['content'] = option_content.hex()
+                    if option_type == 0x07:
+                        option_pointer = options_hex[index + 2]
+                        option['pointer'] = option_pointer
+                        option_content = options_hex[index + 3:index + length]
+                        option['content'] = option_content.hex()
+                    else:
+                        option_content = options_hex[index + 2:index + length]
+                        option['content'] = option_content.hex()
 
                     if option_type == 0x83:
                         option['description'] = "Loose Routing"
@@ -97,7 +102,6 @@ class IP:
             # Parse Options
             if self.ihl > 5:
                 options_hexdump = self.hexdump[40:self.ihl*8]
-                print(options_hexdump)
                 self.options = self.parse_options(options_hexdump)
             else:
                 self.options = None
@@ -128,10 +132,11 @@ class IP:
         else:
             if self.options:
                 options_str = "\tOptions:\n"
-                for option in self.options:
-                    options_str += f"\t\tType: {option['type']}\n" + \
+                for index, option in enumerate(self.options, start=1):
+                    options_str += f"\tOption {index}:\n" + \
                                    f"\t\tLength: {option['length']}\n" + \
                                    f"\t\tDescription: {option['description']}\n" + \
+                                   (f"\t\tPointer: {option['pointer']}\n" if 'pointer' in option else "") + \
                                    (f"\t\tContent: {option['content']}\n" if 'content' in option else "")
             else:
                 options_str = ""
@@ -155,5 +160,5 @@ class IP:
     
 # test it
 if __name__ == '__main__':
-    ip_header = IP('45000028000040004006b8420acc023e00108077f50c')
+    ip_header = IP('4f00007ccbc90000ff01b97f84e33d05c0219f060727040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800a2562f00000029368c410003862b08090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f3031323334353637')
     print(ip_header)

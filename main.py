@@ -1,6 +1,7 @@
 import argparse
 from Network_Analyzer import NetworkAnalyzer
 from utils.preprocess import *
+import os
 
 def display_frames(frames):
     num_frames = len(frames)
@@ -24,20 +25,25 @@ def display_frames(frames):
 def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Analyze network packets from a hexdump file.')
-    parser.add_argument('--input_file', help='Path to the input .pcap file')
+    parser.add_argument('--input_file', help='Path to the input file')
+    parser.add_argument('--output_folder_path', help='Path to the output folder (optional)')
 
     # Parse the arguments
     args = parser.parse_args()
 
     # preprocess the hexdump file using the provided input file path
     frames = read_store(args.input_file)
-
-    # Process the frames
-    # for i, frame in enumerate(frames):
-    #     print(f"Frame {i+1}: ")
-    #     network_packet = NetworkAnalyzer(frame)
-    #     print(network_packet.get_report())
     display_frames(frames)
+
+    if args.output_folder_path:
+        # Save the output to a file
+        file_name  = "out_" + os.path.basename(args.input_file)
+        output_file_path = os.path.join(args.output_folder_path, file_name)
+        with open(output_file_path, 'w') as file:
+            for frame in frames:
+                network_packet = NetworkAnalyzer(frame)
+                file.write(network_packet.get_report())
+                file.write('\n')
 
 if __name__ == "__main__":
     main()

@@ -35,7 +35,6 @@ class NetworkAnalyzer():
                     udp_hexdump = self.ip.get_payload()
                     self.udp = UDP(udp_hexdump)
                     udp_payload = self.udp.get_payload()
-
                     # Check if the packet uses DNS or DHCP
                     try:
                         self.dns = DNS(udp_payload)
@@ -54,19 +53,16 @@ class NetworkAnalyzer():
     def __str__(self):
         if self.err_msg != None:
             try:
-                return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\n" +self.err_msg+ "\n"+"Done!\n"
+                return  f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\n" +self.err_msg+ "\n"+"Done!"
             except:
-                pass
-            try:
-                return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\n" +self.err_msg+ "\n"+"Done!\n"
-            except:
-                pass
-            return f"Ethernet:\n{self.ethernet}\n" +self.err_msg+ "\n"+"Done!\n"
-        
-        elif self.dns:
-            return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\nDNS:\n{self.dns}"+"\n"+"Done!\n"
+                try:
+                    return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\n" +self.err_msg+ "\n"+"Done!"
+                except:
+                    return f"Ethernet:\n{self.ethernet}\n" +self.err_msg+ "\n"+"Done!"
+        if self.dns:
+            return  f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\nDNS:\n{self.dns}"+"\n"+"Done!"
         elif self.dhcp: 
-            return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\nDHCP:\n{self.dhcp}"+"\n" +"Done!\n"
+            return  f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\nDHCP:\n{self.dhcp}"+"\n" +"Done!"
         return "Unknown packet type"
     
     def get_report(self): 
@@ -81,7 +77,7 @@ def read_hexdump(file_path):
 
 
 if __name__ == '__main__':
-    file_path = './sample_data/Processed_dns.txt'
+    file_path = './sample_data/Processed_ipv4.txt'
     hexdump = read_hexdump(file_path)
     network_packet = NetworkAnalyzer(hexdump)
-    network_packet.get_report()
+    print(network_packet.get_report())
