@@ -32,7 +32,7 @@ class NetworkAnalyzer():
                 self.udp = UDP(udp_hexdump)
                 udp_payload = self.udp.get_payload()
 
-                #v Check if the packet uses DNS or DHCP
+                # Check if the packet uses DNS or DHCP
                 try:
                     self.dns = DNS(udp_payload)
                 except:
