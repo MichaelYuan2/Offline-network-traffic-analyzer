@@ -4,7 +4,7 @@ from utils.preprocess import *
 
 def display_frames(frames):
     num_frames = len(frames)
-    batch_size = 5
+    batch_size = 10
     start_index = 0
     
     while start_index < num_frames:
@@ -17,7 +17,7 @@ def display_frames(frames):
             print(network_packet.get_report())
         
         if end_index < num_frames:
-            input("Press Enter to display the next 5 frames...")
+            input("Press Enter to display the next 10 frames...")
         
         start_index = end_index
 

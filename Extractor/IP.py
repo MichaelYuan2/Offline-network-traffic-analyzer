@@ -3,7 +3,7 @@ class IP:
         self.hexdump = hexdump
         self.parse_header()
 
-    def parse_options(options):
+    def parse_options(self, options):
         index = 0
         options_hex = bytes.fromhex(options)
         options = []
@@ -97,6 +97,7 @@ class IP:
             # Parse Options
             if self.ihl > 5:
                 options_hexdump = self.hexdump[40:self.ihl*8]
+                print(options_hexdump)
                 self.options = self.parse_options(options_hexdump)
             else:
                 self.options = None
@@ -126,12 +127,12 @@ class IP:
                 f"\tDestination Address: {self.destination_address}\n"
         else:
             if self.options:
-                options_str = "Options:\n"
+                options_str = "\tOptions:\n"
                 for option in self.options:
-                    options_str += f"\tType: {option['type']}\n" + \
-                                   f"\tLength: {option['length']}\n" + \
-                                   f"\tDescription: {option['description']}\n" + \
-                                   (f"\tContent: {option['content']}\n" if 'content' in option else "")
+                    options_str += f"\t\tType: {option['type']}\n" + \
+                                   f"\t\tLength: {option['length']}\n" + \
+                                   f"\t\tDescription: {option['description']}\n" + \
+                                   (f"\t\tContent: {option['content']}\n" if 'content' in option else "")
             else:
                 options_str = ""
             return f"\tVersion: {self.version}\n" + \

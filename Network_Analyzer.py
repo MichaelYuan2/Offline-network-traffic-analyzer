@@ -20,31 +20,35 @@ class NetworkAnalyzer():
     
     def parse_packet(self):
         self.ethernet = Ethernet(self.hexdump)
-        ip_hexdump = self.ethernet.get_payload()
+        protocal = self.ethernet.ethertype_description
+        if protocal != "IPv4" and protocal != "IPv6":
+            self.err_msg = f"ERROR: {protocal} is not supported"
+        else:
+            ip_hexdump = self.ethernet.get_payload()
 
-        # Check if the packet uses IPv4
-        self.ip = IP(ip_hexdump)
-        if self.ip.version == 6:
-            self.err_msg = "ERROR: IPv6 playload prase is not supported"
-        elif self.ip.version == 4:
-            if self.ip.protocol == "UDP":
-                udp_hexdump = self.ip.get_payload()
-                self.udp = UDP(udp_hexdump)
-                udp_payload = self.udp.get_payload()
+            # Check if the packet uses IPv4
+            self.ip = IP(ip_hexdump)
+            if self.ip.version == 6:
+                self.err_msg = "ERROR: IPv6 playload prase is not supported"
+            elif self.ip.version == 4:
+                if self.ip.protocol == "UDP":
+                    udp_hexdump = self.ip.get_payload()
+                    self.udp = UDP(udp_hexdump)
+                    udp_payload = self.udp.get_payload()
 
-                # Check if the packet uses DNS or DHCP
-                try:
-                    self.dns = DNS(udp_payload)
-                except:
-                    self.dns = None
-                try :
-                    self.dhcp = DHCP(udp_payload)
-                except:
-                    self.dhcp = None
-                if not self.dns and not self.dhcp:
-                    self.err_msg = "ERROR: Unknown UDP payload. Only DNS and DHCP are supported."
-            else:
-                self.err_msg = "ERROR: {} protocol is not supported".format(self.ip.protocol)
+                    # Check if the packet uses DNS or DHCP
+                    try:
+                        self.dns = DNS(udp_payload)
+                    except:
+                        self.dns = None
+                    try :
+                        self.dhcp = DHCP(udp_payload)
+                    except:
+                        self.dhcp = None
+                    if not self.dns and not self.dhcp:
+                        self.err_msg = "ERROR: Unknown UDP payload. Only DNS and DHCP are supported."
+                else:
+                    self.err_msg = "ERROR: {} protocol is not supported".format(self.ip.protocol)
 
 
     def __str__(self):
@@ -52,7 +56,12 @@ class NetworkAnalyzer():
             try:
                 return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\n" +self.err_msg+ "\n"+"Done!\n"
             except:
+                pass
+            try:
                 return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\n" +self.err_msg+ "\n"+"Done!\n"
+            except:
+                pass
+            return f"Ethernet:\n{self.ethernet}\n" +self.err_msg+ "\n"+"Done!\n"
         
         elif self.dns:
             return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\nDNS:\n{self.dns}"+"\n"+"Done!\n"
