@@ -33,7 +33,6 @@ class NetworkAnalyzer():
                 udp_payload = self.udp.get_payload()
 
                 #v Check if the packet uses DNS or DHCP
-                self.dns = DNS(udp_payload)
                 try:
                     self.dns = DNS(udp_payload)
                 except:
@@ -51,14 +50,14 @@ class NetworkAnalyzer():
     def __str__(self):
         if self.err_msg != None:
             try:
-                return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\n" +self.err_msg+ "\n"+"Done!"
+                return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\n" +self.err_msg+ "\n"+"Done!"
             except:
-                return f"Ethernet: {self.ethernet}\nIP: {self.ip}\n" +self.err_msg+ "\n"+"Done!"
+                return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\n" +self.err_msg+ "\n"+"Done!"
         
         elif self.dns:
-            return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\nDNS: {self.dns}"+"\n"+"Done!"
+            return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\nDNS:\n{self.dns}"+"\n"+"Done!"
         elif self.dhcp: 
-            return f"Ethernet: {self.ethernet}\nIP: {self.ip}\nUDP: {self.udp}\nDHCP: {self.dhcp}"+"\n" +"Done!"
+            return f"Ethernet:\n{self.ethernet}\nIP:\n{self.ip}\nUDP:\n{self.udp}\nDHCP:\n{self.dhcp}"+"\n" +"Done!"
         return "Unknown packet type"
     
     def get_report(self): 
