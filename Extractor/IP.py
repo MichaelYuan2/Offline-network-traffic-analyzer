@@ -79,10 +79,11 @@ class IP:
             self.ttl = int(self.hexdump[16:18], 16)
 
             # Parse Protocol
-            self.protocol = int(self.hexdump[18:20], 16)
+            self.protocol = self.hexdump[18:20]
             # convert protocol number to protocol name use dictionary
             protocol_dict = {1: 'ICMP', 6: 'TCP', 17: 'UDP'}
-            self.protocol = protocol_dict.get(self.protocol, 'Unknown')
+            self.protocol_str = f'0x{self.protocol}' + ' (' + protocol_dict.get(int(self.protocol, 16), 'Unknown') + ')'
+            self.protocol = protocol_dict.get(int(self.protocol, 16), 'Unknown')
 
             # Parse Header Checksum
             self.checksum = int(self.hexdump[20:24], 16)
@@ -143,7 +144,7 @@ class IP:
                 f"\tMF: {self.MF}\n" + \
                 f"\tFragment Offset: {self.fragment_offset}\n" + \
                 f"\tTTL: {self.ttl}\n" + \
-                f"\tProtocol: {self.protocol}\n" + \
+                f"\tProtocol: {self.protocol_str}\n" + \
                 f"\tChecksum: {self.checksum}\n" + \
                 f"\tSource Address: {self.source_address}\n" + \
                 f"\tDestination Address: {self.destination_address}\n" + \
