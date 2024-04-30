@@ -18,32 +18,6 @@ def read_store(input_file_path):
         frames = file.readlines()  # Read all lines and store them in a list
     return frames
 
-# def read_hexdump(file_path):
-#     """
-#     Reads a hexdump file and returns a list of byte arrays, each representing a packet.
-
-#     :param file_path: Path to the hexdump file.
-#     :return: List of packets, where each packet is a bytearray.
-#     """
-#     packets = []
-#     current_packet = bytearray()
-#     with open(file_path, 'r') as file:
-#         for line in file:
-#             if line.strip() == "":
-#                 if current_packet:
-#                     packets.append(current_packet)
-#                     current_packet = bytearray()
-#                 continue
-#             # Split the line into parts, ignore the offset and parse the hex bytes
-#             parts = line.strip().split()
-#             hex_bytes = parts[1:]  # Skip the offset part
-#             for hex_byte in hex_bytes:
-#                 current_packet.append(int(hex_byte, 16))
-#         # Add the last packet if the file doesn't end with a newline
-#         if current_packet:
-#             packets.append(current_packet)
-#     return packets
-
 def decode_ethernet_frame(frame_bytes):
     destination_mac = ':'.join(format(byte, '02x') for byte in frame_bytes[0:6])
     source_mac = ':'.join(format(byte, '02x') for byte in frame_bytes[6:12])
