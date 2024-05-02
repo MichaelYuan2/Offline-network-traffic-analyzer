@@ -21,7 +21,7 @@ class Ethernet:
 
         # Set readable EtherType description
         self.ethertype_description = self.get_ethertype_description(ethertype_int)
-        self.type = f"0x{self.type}({self.ethertype_description})"
+        self.type = f"0x{self.type} ({self.ethertype_description})"
 
     def get_ethertype_description(self, type):
         ethertype_map = {

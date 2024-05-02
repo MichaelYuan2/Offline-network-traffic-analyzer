@@ -26,7 +26,7 @@ def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Analyze network packets from a hexdump file.')
     parser.add_argument('--input_file', help='Path to the input file')
-    parser.add_argument('--output_folder_path', help='Path to the output folder (optional)')
+    parser.add_argument('--output_folder_path', help='Path to the output folder (optional)', default='results')
 
     # Parse the arguments
     args = parser.parse_args()
@@ -37,10 +37,13 @@ def main():
 
     if args.output_folder_path:
         # Save the output to a file
+        if not os.path.exists(args.output_folder_path):
+            os.makedirs(args.output_folder_path)
         file_name  = "out_" + os.path.basename(args.input_file)
         output_file_path = os.path.join(args.output_folder_path, file_name)
         with open(output_file_path, 'w') as file:
-            for frame in frames:
+            for i, frame in enumerate(frames):
+                file.write(f"Frame {i+1}:\n")
                 network_packet = NetworkAnalyzer(frame)
                 file.write(network_packet.get_report())
                 file.write('\n')

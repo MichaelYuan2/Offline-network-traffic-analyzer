@@ -17,16 +17,16 @@ The makefile contains the variables and commands to run the program. The followi
 ### Variables
 
 - `input_file`: Specifies the one file to be used when running the program. This file is stored in the `sample_data` directory.
-- `test_files`: Specifies the multiple files to be used when running the program. These files are stored in the `sample_data` directory.
+- `input_files`: Specifies the multiple files to be used when running the program. Some sample files are stored in the `sample_data` directory.
 - `save_results`: Specifies whether to save the output files. The default value is `True`.
-- `output_folder`: Specifies the folder where the output files will be saved. The default value is `results`.
+- `output_folder`: Specifies the folder where the output files will be saved. The default value is `results/`.
 
 ### How to use
 - `make file`: This command runs the main program using one file specified in `input_file`.
 ``` bash
 make file
 ```
-- `make files`: This command runs the main program using mulitple files specified in `test_files`.
+- `make files`: This command runs the main program using mulitple files specified in `input_files`.
 ``` bash
 make files
 ```
