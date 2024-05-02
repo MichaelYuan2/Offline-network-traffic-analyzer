@@ -38,7 +38,7 @@ python main.py --input_path <path_to_file>
 ```
 Optional: If you want to save the output files to a specific folder, run the following command. Replace `<path_to_folder>` with the path to the output folder.
 ``` bash
-python main.py --input_path <path_to_file> --save_rsults --output_folder_path <path_to_folder>
+python main.py --input_path <path_to_file> --save_results --output_folder_path <path_to_folder>
 ```
 
 # Test each layer independently
